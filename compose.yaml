@@ -1,0 +1,7 @@
+﻿services:
+  supplynest.domaine:
+    image: supplynest.domaine
+    build:
+      context: .
+      dockerfile: Src/Catalog/SupplyNest.Domaine/Dockerfile
+

@@ -1,0 +1,6 @@
+@SupplyNest.Domaine_HostAddress = http://localhost:5185
+
+GET {{SupplyNest.Domaine_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
