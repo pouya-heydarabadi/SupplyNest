@@ -9,9 +9,11 @@ namespace SupplyNest.Domain.Application.Services;
 public class ProductRepository:IProductRepository
 {
     private readonly IMongoCollection<Product> _collection;
+
     public ProductRepository(IMongoDatabase database)
     {
         _collection = database.GetCollection<Product>(nameof(Product));
+        
         // Create text index on Name field if it doesn't exist
         var indexKeysDefinition = Builders<Product>.IndexKeys.Text(x => x.Name);
         _collection.Indexes.CreateOne(new CreateIndexModel<Product>(indexKeysDefinition));
@@ -67,7 +69,6 @@ public class ProductRepository:IProductRepository
             combineUpdate);
 
         return result.IsAcknowledged;
-
     }
     public Task DeleteAsync(Guid id)
     {
@@ -274,4 +275,6 @@ public class ProductRepository:IProductRepository
         var combinedFilter = Builders<Product>.Filter.And(filters);
         return await _collection.Find(combinedFilter).ToListAsync();
     }
+
+
 }
