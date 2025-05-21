@@ -21,8 +21,4 @@
       </Content>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Application\Services\Queries\" />
-    </ItemGroup>
-
 </Project>

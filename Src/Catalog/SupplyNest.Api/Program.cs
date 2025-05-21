@@ -7,6 +7,7 @@ using Scalar.AspNetCore;
 using SupplyNest.Domain.Application.Services;
 using SupplyNest.Domain.Application.Services.Commands;
 using SupplyNest.Domain.Application.Services.Commands.Update;
+using SupplyNest.Domain.Application.Services.Queries;
 using SupplyNest.Domain.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,15 +41,24 @@ builder.Services.AddDispatchR(typeof(Program).Assembly, withPipelines: true);
 
 var app = builder.Build();
 
-app.MapPost("Create", async (IMediator mediator, [FromBody] CreateProductCommand  request, CancellationToken cancellation) =>
+app.MapPost("/Create/", async (IMediator mediator, [FromBody] CreateProductCommand  request, CancellationToken cancellation) =>
 {
     var result = await mediator.Send(request, cancellation);
     return Results.Ok(result);
 });
 
-app.MapPost("Update", async (IMediator mediator, [FromBody] UpdateProductCommand  request, CancellationToken cancellation) =>
+app.MapPost("/Update/", async (IMediator mediator, [FromBody] UpdateProductCommand  request, CancellationToken cancellation) =>
 {
     var result = await mediator.Send(request, cancellation);
+    return Results.Ok(result);
+});
+
+app.MapGet("/GetById/{id}", async (IMediator mediator, [FromRoute] Guid id, CancellationToken cancellation) =>
+{
+    var result = await mediator.Send(new GetProductByIdQuery()
+    {
+        Id = id
+    }, cancellation);
     return Results.Ok(result);
 });
 
