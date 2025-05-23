@@ -25,6 +25,14 @@ builder.Services.AddDispatchR(typeof(Program).Assembly);
 //Carter
 builder.Services.AddCarter();
 
+//Kestrel Configs
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.Limits.MaxConcurrentConnections = 1000;
+    serverOptions.Limits.MaxConcurrentUpgradedConnections = 1000;
+});
+
+
 //Redis Configuration
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
@@ -43,14 +51,21 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     return ConnectionMultiplexer.Connect(configurationOptions);
 });
 
-builder.Services.AddSingleton(sp =>
+
+builder.Services.AddSingleton<IDistributedLockFactory>(sp =>
 {
-    var redLockMultiplexer = new RedLockMultiplexer(sp.GetRequiredService<IConnectionMultiplexer>());
-    var redLockFactory = RedLockFactory.Create([redLockMultiplexer]);
-    return redLockFactory;
+    var redisOptions = sp.GetRequiredService<IOptions<ApplicationOptions>>().Value;
+
+    var connection = ConnectionMultiplexer.Connect(redisOptions.RedisConfiguration.ConfigurationUrl);
+
+    var multiplexers = new List<RedLockMultiplexer>
+    {
+        connection
+    };
+
+    return RedLockFactory.Create(multiplexers);
 });
 
-builder.Services.AddSingleton<IDistributedLockFactory>(sp=>sp.GetRequiredService<RedLockFactory>());
 
 // SqlServer
 builder.Services.ConfigureSqlServer();

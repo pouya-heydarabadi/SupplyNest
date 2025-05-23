@@ -10,6 +10,7 @@ public class InventoryRepository(InventoryDbContext _context) : IInventoryReposi
     public async Task<Domain.Entities.Inventory?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         return await _context.Inventories
+            .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 

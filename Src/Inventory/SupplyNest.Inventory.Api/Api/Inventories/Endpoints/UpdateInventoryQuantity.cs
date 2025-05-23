@@ -1,4 +1,5 @@
 ﻿using Carter;
+using RedLockNet;
 using RedLockNet.SERedis;
 using SupplyNest.Inventory.Api.Application.Interfaces;
 
@@ -9,11 +10,16 @@ public sealed class UpdateInventoryQuantity:ICarterModule
 
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPut("/Api/Inventory", async (Guid id, int quantity, IInventoryRepository repository, RedLockFactory RedLockFactory,
+        app.MapPut("/Api/Inventory", async (Guid id, int quantity, IInventoryRepository repository, IDistributedLockFactory _lockFactory,
             CancellationToken cancellationToken) =>
         {
-            const string lockObject = "inventory-update";
-            await using(var redLock = await RedLockFactory.CreateLockAsync(lockObject, TimeSpan.FromSeconds(10)))
+            var resource = $"Inventory-Update:{id}";
+            var expiry = TimeSpan.FromSeconds(5);         // قفل کوتاه‌تر
+            var wait = TimeSpan.FromSeconds(5);           // نهایتاً ۵ ثانیه صبر کن
+            var retry = TimeSpan.FromMilliseconds(50);   // تلاش سریع‌تر برای گرفتن قفل
+
+
+            using (var redLock = await _lockFactory.CreateLockAsync(resource, expiry, wait, retry))
             {
                 if (redLock.IsAcquired)
                 {
