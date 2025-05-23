@@ -1,3 +1,5 @@
+using Carter;
+using DispatchR;
 using Microsoft.Extensions.Options;
 using RedLockNet;
 using RedLockNet.SERedis;
@@ -17,6 +19,11 @@ builder.Services.Configure<ApplicationOptions>(builder.Configuration.GetSection(
 
 builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<ApplicationOptions>>().Value);
 
+//DispatchR
+builder.Services.AddDispatchR(typeof(Program).Assembly);
+
+//Carter
+builder.Services.AddCarter();
 
 //Redis Configuration
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
@@ -44,13 +51,14 @@ builder.Services.AddSingleton(sp =>
 });
 
 builder.Services.AddSingleton<IDistributedLockFactory>(sp=>sp.GetRequiredService<RedLockFactory>());
-    
 
 // SqlServer
 builder.Services.ConfigureSqlServer();
-
+builder.Services.ConfigRepositories();
 
 var app = builder.Build();
+
+app.MapCarter();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -58,22 +66,6 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
-int i = 0;
-app.MapPost("/Test", async (IDistributedLockFactory distributedLockFactory, CancellationToken cancellationToken) =>
-{
-    var resource = "Test";
-    var retryDelay = TimeSpan.FromMilliseconds(200);
-    var expirationTime = TimeSpan.FromSeconds(10);
-    
-    var distributedLock = await distributedLockFactory.CreateLockAsync(resource, expirationTime, expirationTime, retryDelay, cancellationToken);
-    if (distributedLock.IsAcquired)
-    {
-        
-        Console.WriteLine("Success: "+ i);
-        i++;
-        await distributedLock.DisposeAsync();
-    }
-});
 
 app.UseHttpsRedirection();
 

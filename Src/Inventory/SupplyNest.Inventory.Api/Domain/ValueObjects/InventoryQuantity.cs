@@ -5,18 +5,13 @@ using SupplyNest.Inventory.Api.Domain.Exceptions.Base;
 
 namespace SupplyNest.Inventory.Api.Domain.ValueObjects
 {
-    [ComplexType]
     public record InventoryQuantity
     {
         public int Value { get; init; }
 
-        private InventoryQuantity(){}
 
         private InventoryQuantity(int value)
         {
-            if (value < 0)
-                throw new DomainException("Quantity cannot be negative");
-        
             Value = value;
         }
     
