@@ -5,3 +5,9 @@
       context: .
       dockerfile: Src/Catalog/SupplyNest.Domaine/Dockerfile
 
+  supplynest.inventory.api:
+    image: supplynest.inventory.api
+    build:
+      context: .
+      dockerfile: Src/Inventory/SupplyNest.Inventory.Api/Dockerfile
+
