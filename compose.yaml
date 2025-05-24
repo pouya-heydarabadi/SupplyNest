@@ -11,3 +11,9 @@
       context: .
       dockerfile: Src/Inventory/SupplyNest.Inventory.Api/Dockerfile
 
+  supplynest.warehouse.api:
+    image: supplynest.warehouse.api
+    build:
+      context: .
+      dockerfile: Src/Warehouses/SupplyNest.Warehouse.Api/Dockerfile
+
