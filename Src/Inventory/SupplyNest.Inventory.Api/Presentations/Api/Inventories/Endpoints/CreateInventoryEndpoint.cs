@@ -1,9 +1,8 @@
 ﻿using Carter;
 using DispatchR.Requests;
-using SupplyNest.Inventory.Api.Application.Interfaces;
 using SupplyNest.Inventory.Api.Application.Services.Command.Commands;
 
-namespace SupplyNest.Inventory.Api.Api.Inventories.Endpoints;
+namespace SupplyNest.Inventory.Api.Presentations.Api.Inventories.Endpoints;
 
 public sealed class CreateInventoryEndpoint:ICarterModule
 {

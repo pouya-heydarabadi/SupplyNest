@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 using Scalar.AspNetCore;
+using SupplyNest.Warehouse.Api.Application.Interfaces;
 using SupplyNest.Warehouse.Api.Infrastructure;
+using SupplyNest.Warehouse.Api.Infrastructure.ConsulServices;
 using SupplyNest.Warehouse.Api.Infrastructure.SqlServerConfigs.DbContexts;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +16,12 @@ builder.Services.AddSingleton<AppOption>(sp => sp.GetRequiredService<IOptions<Ap
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// Grpc
+builder.Services.AddGrpc();
+
+// Consul
+builder.Services.AddScoped<IConsulService, ConsulService>();
 
 // DispatchR
 builder.Services.AddDispatchR(typeof(Program).Assembly);
@@ -33,6 +41,13 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference();
 }
+
+
+app.MapGet("test", async (IConsulService ConsulService) =>
+{
+    var url = await ConsulService.GetServiceUrl("Inventory-Service");
+    return Results.Ok();
+});
 
 app.UseHttpsRedirection();
 

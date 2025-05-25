@@ -1,9 +1,8 @@
 ﻿using Carter;
 using RedLockNet;
-using RedLockNet.SERedis;
 using SupplyNest.Inventory.Api.Application.Interfaces;
 
-namespace SupplyNest.Inventory.Api.Api.Inventories.Endpoints;
+namespace SupplyNest.Inventory.Api.Presentations.Api.Inventories.Endpoints;
 
 public sealed class UpdateInventoryQuantity:ICarterModule
 {

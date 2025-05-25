@@ -8,6 +8,7 @@ namespace SupplyNest.Inventory.Api.Infrastructure
         public string AllowedHosts { get; set; }
         public RedisConfiguration RedisConfiguration { get; set; }
         public SqlServerConfiguration SqlServerConfiguration { get; set; } 
+        public ServiceRegister ServiceRegister { get; set; }
     }
 
     public class LoggingOptions
@@ -35,4 +36,12 @@ namespace SupplyNest.Inventory.Api.Infrastructure
     {
         public string ConnectionString { get; set; }
     }
+
+    public class ServiceRegister
+    {
+        public string ConsulHostName { get; set; }
+        public string ServiceName { get; set; }
+        public string ServiceId { get; set; }
+    }
 }
+

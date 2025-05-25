@@ -52,7 +52,7 @@ namespace SupplyNest.Inventory.Api.Domain.Entities
             return inventory;
         }
 
-        public void UpdateInventoryQuantity(int newQuantity)
+        public void UpdateInventoryQuantity(long newQuantity)
         {
             var oldQuantity = CurrentInventoryQuantity;
             CurrentInventoryQuantity += InventoryQuantity.FromInt(newQuantity);
@@ -65,7 +65,7 @@ namespace SupplyNest.Inventory.Api.Domain.Entities
             AddDomainEvent(new InventoryQuantityUpdatedEvent(Id, oldQuantity.Value, newQuantity));
         }
 
-        public void UpdateSaleQuantity(int newSaleQuantity)
+        public void UpdateSaleQuantity(long newSaleQuantity)
         {
             var oldQuantity = CurrentSaleQuantity;
             CurrentSaleQuantity += InventoryQuantity.FromInt(newSaleQuantity);

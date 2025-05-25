@@ -1,87 +1,106 @@
-using Carter;
-using DispatchR;
-using Microsoft.Extensions.Options;
-using RedLockNet;
-using RedLockNet.SERedis;
-using RedLockNet.SERedis.Configuration;
-using Scalar.AspNetCore;
-using StackExchange.Redis;
-using SupplyNest.Inventory.Api.Infrastructure;
-using SupplyNest.Inventory.Api.Infrastructure.SqlServerConfig;
+    using Carter;
+    using DispatchR;
+    using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+    using Microsoft.Extensions.Options;
+    using RedLockNet;
+    using RedLockNet.SERedis;
+    using RedLockNet.SERedis.Configuration;
+    using Scalar.AspNetCore;
+    using StackExchange.Redis;
+    using SupplyNest.Inventory.Api.Infrastructure;
+    using SupplyNest.Inventory.Api.Infrastructure.ConsulConfigs;
+    using SupplyNest.Inventory.Api.Infrastructure.SqlServerConfig;
+    using SupplyNest.Inventory.Api.Presentations.Grpc.Services;
 
-var builder = WebApplication.CreateBuilder(args);
+    var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+    // Add services to the container.
+    // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+    builder.Services.AddOpenApi();
 
-builder.Services.Configure<ApplicationOptions>(builder.Configuration.GetSection("ApplicationOptions"));
+    builder.Services.Configure<ApplicationOptions>(builder.Configuration.GetSection("ApplicationOptions"));
 
-builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<ApplicationOptions>>().Value);
+    builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<ApplicationOptions>>().Value);
 
-//DispatchR
-builder.Services.AddDispatchR(typeof(Program).Assembly);
+    ApplicationOptions applicationOptions = builder.Services.BuildServiceProvider().GetRequiredService<ApplicationOptions>();
 
-//Carter
-builder.Services.AddCarter();
+    //DispatchR
+    builder.Services.AddDispatchR(typeof(Program).Assembly);
 
-//Kestrel Configs
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.Limits.MaxConcurrentConnections = 1000;
-    serverOptions.Limits.MaxConcurrentUpgradedConnections = 1000;
-});
+    //Carter
+    builder.Services.AddCarter();
 
-
-//Redis Configuration
-builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
-{
-    var options = sp.GetRequiredService<IOptions<ApplicationOptions>>().Value;
-    var redisConfig = options.RedisConfiguration;
-
-    var configString = redisConfig.ConfigurationUrl;
-
-    var configurationOptions = ConfigurationOptions.Parse(configString);
-    configurationOptions.Ssl = redisConfig.UseSSL;
-    if (!string.IsNullOrEmpty(redisConfig.PassWord))
+    //Kestrel Configs
+    builder.WebHost.ConfigureKestrel(serverOptions =>
     {
-        configurationOptions.Password = redisConfig.PassWord;
+        serverOptions.Limits.MaxConcurrentConnections = 1000;
+        serverOptions.Limits.MaxConcurrentUpgradedConnections = 1000;
+    });
+
+
+    //Redis Configuration
+    builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
+    {
+        var options = sp.GetRequiredService<IOptions<ApplicationOptions>>().Value;
+        var redisConfig = options.RedisConfiguration;
+
+        var configString = redisConfig.ConfigurationUrl;
+
+        var configurationOptions = ConfigurationOptions.Parse(configString);
+        configurationOptions.Ssl = redisConfig.UseSSL;
+        if (!string.IsNullOrEmpty(redisConfig.PassWord))
+        {
+            configurationOptions.Password = redisConfig.PassWord;
+        }
+
+        return ConnectionMultiplexer.Connect(configurationOptions);
+    });
+
+
+    builder.Services.AddSingleton<IDistributedLockFactory>(sp =>
+    {
+        var redisOptions = sp.GetRequiredService<IOptions<ApplicationOptions>>().Value;
+
+        var connection = ConnectionMultiplexer.Connect(redisOptions.RedisConfiguration.ConfigurationUrl);
+
+        var multiplexers = new List<RedLockMultiplexer>
+        {
+            connection
+        };
+
+        return RedLockFactory.Create(multiplexers);
+    });
+
+
+    // SqlServer
+    builder.Services.ConfigureSqlServer();
+    builder.Services.ConfigRepositories();
+
+    // HealthCheck
+    builder.Services.AddHealthChecks();
+
+
+    var app = builder.Build();
+
+
+    //GRPC
+    app.MapGrpcService<InventoryUpdateGrpcService>();
+
+    app.RegisterConsul(applicationOptions, builder);
+
+    app.MapCarter();
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.MapOpenApi();
+        app.MapScalarApiReference();
     }
 
-    return ConnectionMultiplexer.Connect(configurationOptions);
-});
 
+    // HealthCheck
+    app.MapHealthChecks("/agent/checks");
 
-builder.Services.AddSingleton<IDistributedLockFactory>(sp =>
-{
-    var redisOptions = sp.GetRequiredService<IOptions<ApplicationOptions>>().Value;
+    app.UseHttpsRedirection();
 
-    var connection = ConnectionMultiplexer.Connect(redisOptions.RedisConfiguration.ConfigurationUrl);
-
-    var multiplexers = new List<RedLockMultiplexer>
-    {
-        connection
-    };
-
-    return RedLockFactory.Create(multiplexers);
-});
-
-
-// SqlServer
-builder.Services.ConfigureSqlServer();
-builder.Services.ConfigRepositories();
-
-var app = builder.Build();
-
-app.MapCarter();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.MapScalarApiReference();
-}
-
-app.UseHttpsRedirection();
-
-app.Run();
+    app.Run();

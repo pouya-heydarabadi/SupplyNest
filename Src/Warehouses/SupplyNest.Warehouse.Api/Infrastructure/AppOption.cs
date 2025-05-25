@@ -7,6 +7,7 @@ namespace SupplyNest.Warehouse.Api.Infrastructure
         public LoggingOptions Logging { get; set; }
         public string AllowedHosts { get; set; }
         public SqlServerConfiguration SqlServerConfiguration { get; set; } 
+        public ServiceRegister ServiceRegister { get; set; }
     }
 
     public class LoggingOptions
@@ -26,5 +27,11 @@ namespace SupplyNest.Warehouse.Api.Infrastructure
     public class SqlServerConfiguration
     {
         public string ConnectionString { get; set; }
+    }
+    public class ServiceRegister
+    {
+        public string ConsulHostName { get; set; }
+        public string ServiceName { get; set; }
+        public string ServiceId { get; set; }
     }
 }   

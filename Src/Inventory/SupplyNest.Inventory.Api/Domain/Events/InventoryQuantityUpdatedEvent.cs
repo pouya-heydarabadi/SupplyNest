@@ -5,10 +5,10 @@ namespace SupplyNest.Inventory.Api.Domain.Events
 {
     public record InventoryQuantityUpdatedEvent : InventoryDomainEvent
     {
-        public int OldQuantity { get; }
-        public int NewQuantity { get; }
+        public long OldQuantity { get; }
+        public long NewQuantity { get; }
 
-        public InventoryQuantityUpdatedEvent(Guid inventoryId, int oldQuantity, int newQuantity)
+        public InventoryQuantityUpdatedEvent(Guid inventoryId, long oldQuantity, long newQuantity)
             : base(inventoryId)
         {
             OldQuantity = oldQuantity;
