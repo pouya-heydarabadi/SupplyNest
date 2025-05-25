@@ -41,7 +41,7 @@
     </ItemGroup>
     
     <ItemGroup>
-        <None Include="Presentations\Grpc\Structure\UpdateInventory.proto" GrpcServices="Server" />
+        <Protobuf  Include="Presentations\Grpc\Structure\UpdateInventory.proto" GrpcServices="Server" />
     </ItemGroup>
 
 </Project>
