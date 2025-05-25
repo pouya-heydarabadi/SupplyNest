@@ -1,6 +1,7 @@
     using Carter;
     using DispatchR;
     using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+    using Microsoft.AspNetCore.Server.Kestrel.Core;
     using Microsoft.Extensions.Options;
     using RedLockNet;
     using RedLockNet.SERedis;
@@ -13,6 +14,13 @@
     using SupplyNest.Inventory.Api.Presentations.Grpc.Services;
 
     var builder = WebApplication.CreateBuilder(args);
+
+    
+    
+    builder.WebHost.ConfigureKestrel(options =>
+    {
+        options.ListenLocalhost(5044, o => o.Protocols = HttpProtocols.Http2);
+    });
 
     // Add services to the container.
     // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -79,9 +87,9 @@
     // HealthCheck
     builder.Services.AddHealthChecks();
 
+    builder.Services.AddGrpc();
 
     var app = builder.Build();
-
 
     //GRPC
     app.MapGrpcService<InventoryUpdateGrpcService>();

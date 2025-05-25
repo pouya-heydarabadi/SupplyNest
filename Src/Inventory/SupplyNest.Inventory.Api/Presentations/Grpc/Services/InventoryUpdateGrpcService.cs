@@ -15,6 +15,9 @@ public class InventoryUpdateGrpcService( IInventoryRepository repository, IDistr
         var retry = TimeSpan.FromMilliseconds(50);   // تلاش سریع‌تر برای گرفتن قفل
 
         Guid id=Guid.Parse(request.InventoryId);
+        try
+        {
+
 
         using (var redLock = await _lockFactory.CreateLockAsync(resource, expiry, wait, retry))
         {
@@ -40,5 +43,11 @@ public class InventoryUpdateGrpcService( IInventoryRepository repository, IDistr
         {
             Result = false
         };
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }
