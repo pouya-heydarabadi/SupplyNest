@@ -12,6 +12,7 @@
         <PackageReference Include="DispatchR.Mediator" Version="1.1.0" />
         <PackageReference Include="Google.Protobuf" Version="3.31.0" />
         <PackageReference Include="Grpc.AspNetCore" Version="2.71.0" />
+        <PackageReference Include="Grpc.Net.Client" Version="2.71.0" />
         <PackageReference Include="Grpc.Tools" Version="2.72.0">
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
           <PrivateAssets>all</PrivateAssets>
@@ -34,6 +35,16 @@
       <Content Include="..\..\..\.dockerignore">
         <Link>.dockerignore</Link>
       </Content>
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Protobuf Include="Presentation\Grpc\Stracture\UpdateInventoryRequest.proto" GrpcServices="Client" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Application\Services\WarehouseReceipts\Queries\" />
+      <Folder Include="Presentation\Api\" />
+      <Folder Include="Presentation\Grpc\Services\" />
     </ItemGroup>
 
 </Project>

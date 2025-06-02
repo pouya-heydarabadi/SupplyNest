@@ -1,11 +1,14 @@
 using DispatchR;
+using DispatchR.Requests;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 using Scalar.AspNetCore;
 using SupplyNest.Warehouse.Api.Application.Interfaces;
+using SupplyNest.Warehouse.Api.Application.Services.WarehouseReceipts.Commands;
 using SupplyNest.Warehouse.Api.Infrastructure;
 using SupplyNest.Warehouse.Api.Infrastructure.ConsulServices;
+using SupplyNest.Warehouse.Api.Infrastructure.Services;
 using SupplyNest.Warehouse.Api.Infrastructure.SqlServerConfigs.DbContexts;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +36,8 @@ builder.Services.AddDbContextPool<WarehouseDbContext>(config =>
     config.UseSqlServer(options.SqlServerConfiguration.ConnectionString);  
 });
 
+builder.Services.AddScoped<IInventoryService, InventoryService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -48,6 +53,14 @@ app.MapGet("test", async (IConsulService ConsulService) =>
     var url = await ConsulService.GetServiceUrl("Inventory-Service");
     return Results.Ok();
 });
+
+
+app.MapPost("create-warehouse-receipt", async (CreateWarehouseReceiptCommand command, IMediator mediator, CancellationToken cancellationToken) =>
+{
+    var result = await mediator.Send(command, cancellationToken);
+    return Results.Ok(result);
+});
+
 
 app.UseHttpsRedirection();
 

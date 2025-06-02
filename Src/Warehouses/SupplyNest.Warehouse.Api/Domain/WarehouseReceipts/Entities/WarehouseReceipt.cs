@@ -19,11 +19,11 @@ public sealed class WarehouseReceipt : BaseEntity
     public string Description { get; private set; }
     public ReceiptStatusEnum Status { get; private set; }
 
-    public Guid ReceiverId { get; private set; }
-    public string ReceiverName { get; private set; }
+    public Guid? ReceiverId { get; private set; }
+    public string? ReceiverName { get; private set; }
     
-    public Guid ApproverId { get; private set; }
-    public string ApproverName { get; private set; }
+    public Guid? ApproverId { get; private set; }
+    public string? ApproverName { get; private set; }
     public DateTime? ApprovedAt { get; private set; }
     
     public List<WarehouseReceiptItem> Items { get; private set; }

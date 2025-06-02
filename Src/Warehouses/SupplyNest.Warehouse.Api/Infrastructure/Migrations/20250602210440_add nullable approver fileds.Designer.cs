@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SupplyNest.Warehouse.Api.Infrastructure.SqlServerConfigs.DbContexts;
 
@@ -11,9 +12,11 @@ using SupplyNest.Warehouse.Api.Infrastructure.SqlServerConfigs.DbContexts;
 namespace SupplyNest.Warehouse.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(WarehouseDbContext))]
-    partial class WarehouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250602210440_add nullable approver fileds")]
+    partial class addnullableapproverfileds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,11 +75,12 @@ namespace SupplyNest.Warehouse.Api.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid?>("ReceiverId")
+                    b.Property<Guid>("ReceiverId")
                         .HasMaxLength(50)
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ReceiverName")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
