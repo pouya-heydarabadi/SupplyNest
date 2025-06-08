@@ -10,6 +10,7 @@ using SupplyNest.Domain.Application.Services.Commands.Create;
 using SupplyNest.Domain.Application.Services.Commands.Update;
 using SupplyNest.Domain.Application.Services.Interfaces;
 using SupplyNest.Domain.Application.Services.Queries;
+using MassTransit; // Added for MassTransit
 using SupplyNest.Domain.Infrastructure;
 using SupplyNest.Domain.Infrastructure.Persistence;
 
@@ -40,7 +41,28 @@ builder.Services.AddSingleton<IMongoDatabase>(config =>
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
-builder.Services.AddDispatchR(typeof(Program).Assembly, withPipelines: true);
+builder.Services.AddDispatchR(typeof(Program).Assembly, withPipelines: true); // This will be an issue if DispatchR was removed from csproj
+
+// MassTransit Configuration
+builder.Services.AddMassTransit(x =>
+{
+    x.SetKebabCaseEndpointNameFormatter();
+
+    // Automatically discover and register consumers from the assembly
+    x.AddConsumers(typeof(Program).Assembly);
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        // Replace with actual configuration later
+        cfg.Host("localhost", "/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
 var app = builder.Build();
 

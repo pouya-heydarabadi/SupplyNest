@@ -27,7 +27,7 @@ builder.Services.AddGrpc();
 builder.Services.AddScoped<IConsulService, ConsulService>();
 
 // DispatchR
-builder.Services.AddDispatchR(typeof(Program).Assembly);
+builder.Services.AddDispatchR(typeof(Program).Assembly); // This will be an issue if DispatchR was removed from csproj
 
 //SQL Server Configuration
 AppOption options = builder.Services.BuildServiceProvider().GetRequiredService<IOptions<AppOption>>().Value;
@@ -37,6 +37,27 @@ builder.Services.AddDbContextPool<WarehouseDbContext>(config =>
 });
 
 builder.Services.AddScoped<IInventoryService, InventoryService>();
+
+// MassTransit Configuration
+builder.Services.AddMassTransit(x =>
+{
+    x.SetKebabCaseEndpointNameFormatter();
+
+    // Automatically discover and register consumers from the assembly
+    x.AddConsumers(typeof(Program).Assembly);
+
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        // Replace with actual configuration later
+        cfg.Host("localhost", "/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+
+        cfg.ConfigureEndpoints(context);
+    });
+});
 
 var app = builder.Build();
 

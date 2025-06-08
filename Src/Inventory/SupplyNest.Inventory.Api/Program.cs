@@ -8,6 +8,7 @@
     using RedLockNet.SERedis.Configuration;
     using Scalar.AspNetCore;
     using StackExchange.Redis;
+    using MassTransit; // Added for MassTransit
     using SupplyNest.Inventory.Api.Infrastructure;
     using SupplyNest.Inventory.Api.Infrastructure.ConsulConfigs;
     using SupplyNest.Inventory.Api.Infrastructure.SqlServerConfig;
@@ -88,6 +89,27 @@
     builder.Services.AddHealthChecks();
 
     builder.Services.AddGrpc();
+
+    // MassTransit Configuration
+    builder.Services.AddMassTransit(x =>
+    {
+        x.SetKebabCaseEndpointNameFormatter();
+
+        // Automatically discover and register consumers from the assembly
+        x.AddConsumers(typeof(Program).Assembly);
+
+        x.UsingRabbitMq((context, cfg) =>
+        {
+            // Replace with actual configuration later
+            cfg.Host("localhost", "/", h =>
+            {
+                h.Username("guest");
+                h.Password("guest");
+            });
+
+            cfg.ConfigureEndpoints(context);
+        });
+    });
 
     var app = builder.Build();
 

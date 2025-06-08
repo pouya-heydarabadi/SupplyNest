@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Warehouses", "Warehouses", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupplyNest.Warehouse.Api", "Src\Warehouses\SupplyNest.Warehouse.Api\SupplyNest.Warehouse.Api.csproj", "{17E17DB9-3757-49E4-BF8E-9FD482857A55}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SupplyNest.SagaOrchestrator", "Src\SupplyNest.SagaOrchestrator\SupplyNest.SagaOrchestrator.csproj", "{F39FA926-9EA5-4731-8463-B6825992F333}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,7 @@ Global
 		{06CF1317-4FAF-46D8-987E-17FB15279761} = {77F53225-ACBA-4C8D-AE50-DC03230EFE61}
 		{BDDA1D7D-4FBA-40B5-A505-64AA676E7CC3} = {9251A8F8-6B77-4A7F-910B-87736DEE76F1}
 		{17E17DB9-3757-49E4-BF8E-9FD482857A55} = {BDDA1D7D-4FBA-40B5-A505-64AA676E7CC3}
+		{F39FA926-9EA5-4731-8463-B6825992F333} = {9251A8F8-6B77-4A7F-910B-87736DEE76F1}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A189F40F-1B30-4DF3-AD3E-E384A4FD0418}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -51,5 +54,9 @@ Global
 		{17E17DB9-3757-49E4-BF8E-9FD482857A55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17E17DB9-3757-49E4-BF8E-9FD482857A55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17E17DB9-3757-49E4-BF8E-9FD482857A55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F39FA926-9EA5-4731-8463-B6825992F333}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F39FA926-9EA5-4731-8463-B6825992F333}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F39FA926-9EA5-4731-8463-B6825992F333}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F39FA926-9EA5-4731-8463-B6825992F333}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
