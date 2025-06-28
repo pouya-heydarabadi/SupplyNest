@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Consul" Version="1.7.14.7" />
         <PackageReference Include="DispatchR.Mediator" Version="1.1.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.5" />
         <PackageReference Include="MongoDB.Driver" Version="3.4.0" />
@@ -16,13 +17,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\..\..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+      <Folder Include="Infrastructure\Services\" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Infrastructure\Services\" />
+      <Content Include="..\..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

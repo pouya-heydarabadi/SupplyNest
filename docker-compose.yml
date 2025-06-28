@@ -1,0 +1,88 @@
+﻿services:
+  supplynest.catalog.api:
+    build:
+      context: .
+      dockerfile: Src/Catalog/SupplyNest.Catalog.Api/Dockerfile
+    networks:
+      - supplynest_net
+  supplynest.inventory.api:
+    build:
+      context: .
+      dockerfile: Src/Inventory/SupplyNest.Inventory.Api/Dockerfile
+    networks:
+      - supplynest_net
+  supplynest.warehouse.api:
+    build:
+      context: .
+      dockerfile: Src/Warehouses/SupplyNest.Warehouse.Api/Dockerfile
+    networks:
+      - supplynest_net
+      
+  postgres:
+    image: postgres:16
+    container_name: postgres_supplynest
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123!
+      POSTGRES_DB: InventoryDB_SupplyNest
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - supplynest_net
+  pgadmin_inventorydb:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_inventorydb
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin123!
+    ports:
+      - "8081:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - supplynest_net
+  consul:
+    image: hashicorp/consul:1.15
+    container_name: consul
+    ports:
+      - "8500:8500"
+      - "8600:8600/udp"
+    networks:
+      - supplynest_net
+  redis_inventory:
+    image: redis:7
+    container_name: RedisInventory_SupplyNest
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - supplynest_net
+    mongodb_catalog:
+    image: mongo:latest
+    container_name: MongoCatalog_SupplyNest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: pouya
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - supplynest_net
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+  redis_data:
+  mongodb_data:
+    
+networks:
+  supplynest_net:
+    driver: bridge

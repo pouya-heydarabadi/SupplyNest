@@ -17,25 +17,23 @@ public class InventoryUpdateGrpcService( IInventoryRepository repository, IDistr
         Guid id=Guid.Parse(request.InventoryId);
         try
         {
-
-
-        using (var redLock = await _lockFactory.CreateLockAsync(resource, expiry, wait, retry))
-        {
-            if (redLock.IsAcquired)
+            using (var redLock = await _lockFactory.CreateLockAsync(resource, expiry, wait, retry))
             {
-                var inventory = await repository.GetByIdAsync(id);
-                if (inventory is null)
-                    throw new RpcException(new Status(StatusCode.NotFound, "Inventory not found"));
-                
-                inventory.UpdateInventoryQuantity(request.ChangeQuantity);
-                inventory.UpdateSaleQuantity(request.ChangeQuantity);
-
-                await repository.UpdateAsync(inventory);
-                return new UpdateInventoryResponse
+                if (redLock.IsAcquired)
                 {
-                    Result = true
-                };
-            }
+                    var inventory = await repository.GetByIdAsync(id);
+                    if (inventory is null)
+                        throw new RpcException(new Status(StatusCode.NotFound, "Inventory not found"));
+                    
+                    inventory.UpdateInventoryQuantity(request.ChangeQuantity);
+                    inventory.UpdateSaleQuantity(request.ChangeQuantity);
+
+                    await repository.UpdateAsync(inventory);
+                    return new UpdateInventoryResponse
+                    {
+                        Result = true
+                    };
+                }
         }
         
         

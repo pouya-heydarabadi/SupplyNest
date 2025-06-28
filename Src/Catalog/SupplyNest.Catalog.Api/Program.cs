@@ -1,3 +1,4 @@
+using Consul;
 using DispatchR;
 using DispatchR.Requests;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using SupplyNest.Domain.Application.Services.Commands.Update;
 using SupplyNest.Domain.Application.Services.Interfaces;
 using SupplyNest.Domain.Application.Services.Queries;
 using SupplyNest.Domain.Infrastructure;
+using SupplyNest.Domain.Infrastructure.Consul;
 using SupplyNest.Domain.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,20 +22,27 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 
-builder.Services.Configure<ApplicationOption>(builder.Configuration.GetSection("MongoDbSettings"));
+builder.Services.Configure<ApplicationOptions>(builder.Configuration.GetSection("ApplicationOptions"));
+builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<ApplicationOptions>>().Value);
+
+
+// Register Consul Service
+builder.Services.AddSingleton<IConsulClient, ConsulClient>(p => new ConsulClient(config =>
+{
+    config.Address = new Uri("http://localhost:8500");
+}));
 
 builder.Services.AddSingleton<IMongoClient>(config =>
 {
-    var setting = config.GetRequiredService<IOptions<ApplicationOption>>().Value;
-    return new MongoClient(setting.ConnectionString);
+    var setting = config.GetRequiredService<IOptions<ApplicationOptions>>().Value;
+    return new MongoClient(setting.MongoDbSettings.ConnectionString);
 });
-
 
 builder.Services.AddSingleton<IMongoDatabase>(config =>
 {
-    var setting = config.GetRequiredService<IOptions<ApplicationOption>>().Value;
+    var setting = config.GetRequiredService<IOptions<ApplicationOptions>>().Value;
     var client = config.GetRequiredService<IMongoClient>();
-    return client.GetDatabase(setting.DataBaseName);
+    return client.GetDatabase(setting.MongoDbSettings.DatabaseName);
 });
 
 
@@ -73,6 +82,11 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
     app.MapOpenApi();
 }
+
+// Consul
+var applicationOption = builder.Services.BuildServiceProvider().GetRequiredService<ApplicationOptions>();
+
+app.RegisterConsul(applicationOption, builder);
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

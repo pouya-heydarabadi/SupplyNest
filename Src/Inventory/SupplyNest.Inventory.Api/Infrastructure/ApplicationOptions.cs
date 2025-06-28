@@ -7,7 +7,7 @@ namespace SupplyNest.Inventory.Api.Infrastructure
         public LoggingOptions Logging { get; set; }
         public string AllowedHosts { get; set; }
         public RedisConfiguration RedisConfiguration { get; set; }
-        public SqlServerConfiguration SqlServerConfiguration { get; set; } 
+        public DbConfiguration DbConfiguration { get; set; } 
         public ServiceRegister ServiceRegister { get; set; }
     }
 
@@ -32,7 +32,7 @@ namespace SupplyNest.Inventory.Api.Infrastructure
         public bool UseSSL { get; set; }
     }
 
-    public class SqlServerConfiguration
+    public class DbConfiguration
     {
         public string ConnectionString { get; set; }
     }

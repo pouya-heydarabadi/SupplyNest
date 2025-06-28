@@ -1,4 +1,5 @@
     using Carter;
+    using Consul;
     using DispatchR;
     using Microsoft.AspNetCore.Diagnostics.HealthChecks;
     using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -18,8 +19,8 @@
     
     
     builder.WebHost.ConfigureKestrel(options =>
-    {
-        options.ListenLocalhost(5044, o => o.Protocols = HttpProtocols.Http2);
+    { ;
+        options.ListenLocalhost(5044, o => o.Protocols = HttpProtocols.Http1AndHttp2);
     });
 
     // Add services to the container.
@@ -30,7 +31,13 @@
 
     builder.Services.AddSingleton(sp => sp.GetRequiredService<IOptions<ApplicationOptions>>().Value);
 
-    ApplicationOptions applicationOptions = builder.Services.BuildServiceProvider().GetRequiredService<ApplicationOptions>();
+            
+        
+    // Register Consul Service
+    builder.Services.AddSingleton<IConsulClient, ConsulClient>(p => new ConsulClient(config =>
+    {
+        config.Address = new Uri("http://localhost:8500");
+    }));
 
     //DispatchR
     builder.Services.AddDispatchR(typeof(Program).Assembly);
@@ -89,11 +96,14 @@
 
     builder.Services.AddGrpc();
 
+    builder.Services.AddHttpClient();
+
     var app = builder.Build();
 
     //GRPC
     app.MapGrpcService<InventoryUpdateGrpcService>();
 
+    ApplicationOptions applicationOptions = app.Services.GetRequiredService<ApplicationOptions>();
     app.RegisterConsul(applicationOptions, builder);
 
     app.MapCarter();

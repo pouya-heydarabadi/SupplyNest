@@ -3,56 +3,53 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SupplyNest.Inventory.Api.Infrastructure.SqlServerConfig.DbContexts;
 
 #nullable disable
 
-namespace SupplyNest.Inventory.Api.Infrastructure.SqlServerConfig.Migrations
+namespace SupplyNest.Inventory.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(InventoryDbContext))]
-    [Migration("20250523164944_add index in product and warehouseand fiscalyear")]
-    partial class addindexinproductandwarehouseandfiscalyear
+    partial class InventoryDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.5")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("SupplyNest.Inventory.Api.Domain.Entities.Inventory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAtTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("FiscalYearId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<DateTime?>("LastModifiedTime")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("WarehouseId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uuid");
 
                     b.ComplexProperty<Dictionary<string, object>>("CurrentInventoryQuantity", "SupplyNest.Inventory.Api.Domain.Entities.Inventory.CurrentInventoryQuantity#InventoryQuantity", b1 =>
                         {
                             b1.IsRequired();
 
-                            b1.Property<int>("Value")
-                                .HasColumnType("int")
+                            b1.Property<long>("Value")
+                                .HasColumnType("bigint")
                                 .HasColumnName("CurrentInventoryQuantity");
                         });
 
@@ -60,8 +57,8 @@ namespace SupplyNest.Inventory.Api.Infrastructure.SqlServerConfig.Migrations
                         {
                             b1.IsRequired();
 
-                            b1.Property<int>("Value")
-                                .HasColumnType("int")
+                            b1.Property<long>("Value")
+                                .HasColumnType("bigint")
                                 .HasColumnName("CurrentSaleQuantity");
                         });
 

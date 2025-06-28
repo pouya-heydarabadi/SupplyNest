@@ -1,12 +1,11 @@
 ﻿using Consul;
-using Microsoft.CodeAnalysis.FlowAnalysis;
 
-namespace SupplyNest.Inventory.Api.Infrastructure.ConsulConfigs;
+namespace SupplyNest.Domain.Infrastructure.Consul;
 
 public static class ServiceRegister
 {
     public static WebApplication RegisterConsul(this WebApplication app, 
-        ApplicationOptions applicationOptions, WebApplicationBuilder builder)
+         ApplicationOptions applicationOptions, WebApplicationBuilder builder)
     {
         var baseUrl = app.Urls.FirstOrDefault() ?? builder.Configuration["ASPNETCORE_URLS"] ?? "http://localhost:5044/";
         var uri = new Uri(baseUrl);
@@ -60,7 +59,6 @@ public static class ServiceRegister
         });
         
 
-        
         return app;
     }
 }

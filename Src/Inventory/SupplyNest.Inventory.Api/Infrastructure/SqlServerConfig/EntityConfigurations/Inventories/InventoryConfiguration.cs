@@ -29,5 +29,9 @@ public class InventoryConfiguration:IEntityTypeConfiguration<Domain.Entities.Inv
         {
             config.Property(q => q.Value).HasColumnName(("CurrentSaleQuantity"));
         });
+
+        builder.Property(x=>x.CreatedAtTime).HasColumnType("timestamp without time zone");
+        builder.Property(x=>x.LastModifiedTime).HasColumnType("timestamp without time zone");
+
     }
 }

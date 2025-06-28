@@ -4,7 +4,7 @@ using SupplyNest.Inventory.Api.Infrastructure.SqlServerConfig.DbContexts;
 
 namespace SupplyNest.Inventory.Api.Infrastructure.SqlServerConfig;
 
-public static class ConfigSqlServer
+public static class ConfigDb
 
 {
     public static IServiceCollection ConfigureSqlServer(this IServiceCollection service)
@@ -13,7 +13,7 @@ public static class ConfigSqlServer
         
         service.AddDbContextPool<InventoryDbContext>(config =>
         {
-            config.UseSqlServer(options.SqlServerConfiguration.ConnectionString);  
+            config.UseNpgsql(options.DbConfiguration.ConnectionString);  
         });
 
         return service;
