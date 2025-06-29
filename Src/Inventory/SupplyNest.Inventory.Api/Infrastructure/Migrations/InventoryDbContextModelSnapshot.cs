@@ -20,7 +20,7 @@ namespace SupplyNest.Inventory.Api.Infrastructure.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
-
+ 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("SupplyNest.Inventory.Api.Domain.Entities.Inventory", b =>
