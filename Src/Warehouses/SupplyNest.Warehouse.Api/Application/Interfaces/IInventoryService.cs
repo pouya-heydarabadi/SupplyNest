@@ -1,5 +1,4 @@
-﻿using SupplyNest.Inventory.Api.Presentations.Grpc.Structure;
-using SupplyNest.Warehouse.Api.Application.Dtos;
+﻿using SupplyNest.Warehouse.Api.Application.Dtos;
 
 namespace SupplyNest.Warehouse.Api.Application.Interfaces;
 

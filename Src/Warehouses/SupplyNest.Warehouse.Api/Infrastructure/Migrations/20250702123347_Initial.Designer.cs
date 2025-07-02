@@ -12,8 +12,8 @@ using SupplyNest.Warehouse.Api.Infrastructure.SqlServerConfigs.DbContexts;
 namespace SupplyNest.Warehouse.Api.Infrastructure.Migrations
 {
     [DbContext(typeof(WarehouseDbContext))]
-    [Migration("20250602210440_add nullable approver fileds")]
-    partial class addnullableapproverfileds
+    [Migration("20250702123347_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,12 +75,11 @@ namespace SupplyNest.Warehouse.Api.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid>("ReceiverId")
+                    b.Property<Guid?>("ReceiverId")
                         .HasMaxLength(50)
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ReceiverName")
-                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 

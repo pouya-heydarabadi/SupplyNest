@@ -1,4 +1,4 @@
-﻿namespace SupplyNest.Warehouse.Api.Application.Interfaces;
+﻿namespace BuldingBlocks.Application.ConsuleInterfaces;
 
 public interface IConsulService
 {

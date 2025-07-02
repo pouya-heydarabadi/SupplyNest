@@ -36,12 +36,18 @@
     </ItemGroup>
     
     <ItemGroup>
+      <Folder Include="Infrastructure\ConsulConfigs\" />
       <Folder Include="Presentations\Api\" />
-      <Folder Include="Presentations\Grpc\Services\" />
     </ItemGroup>
     
     <ItemGroup>
         <Protobuf  Include="Presentations\Grpc\Structure\UpdateInventory.proto" GrpcServices="Server" />
+        <Protobuf  Include="Presentations\Grpc\Structure\Client\GetWarehouseById.proto" GrpcServices="Client" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\..\BuildingBlocks\BuildingBlocks.Application\BuldingBlocks.Application\BuldingBlocks.Application.csproj" />
+      <ProjectReference Include="..\..\BuildingBlocks\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>

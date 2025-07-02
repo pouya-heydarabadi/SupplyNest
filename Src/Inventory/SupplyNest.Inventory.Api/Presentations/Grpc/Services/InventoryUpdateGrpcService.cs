@@ -34,7 +34,7 @@ public class InventoryUpdateGrpcService( IInventoryRepository repository, IDistr
                         Result = true
                     };
                 }
-        }
+            }
         
         
         return new UpdateInventoryResponse

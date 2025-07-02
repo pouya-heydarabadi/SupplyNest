@@ -1,3 +1,5 @@
+    using BuildingBlocks.Infrastructure.ConsulServices;
+    using BuldingBlocks.Application.ConsuleInterfaces;
     using Carter;
     using Consul;
     using DispatchR;
@@ -10,7 +12,6 @@
     using Scalar.AspNetCore;
     using StackExchange.Redis;
     using SupplyNest.Inventory.Api.Infrastructure;
-    using SupplyNest.Inventory.Api.Infrastructure.ConsulConfigs;
     using SupplyNest.Inventory.Api.Infrastructure.SqlServerConfig;
     using SupplyNest.Inventory.Api.Presentations.Grpc.Services;
 
@@ -39,6 +40,9 @@
         config.Address = new Uri("http://localhost:8500");
     }));
 
+    builder.Services.AddScoped<IConsulService, ConsulService>();
+
+    
     //DispatchR
     builder.Services.AddDispatchR(typeof(Program).Assembly);
 
@@ -104,8 +108,9 @@
     app.MapGrpcService<InventoryUpdateGrpcService>();
 
     ApplicationOptions applicationOptions = app.Services.GetRequiredService<ApplicationOptions>();
-    app.RegisterConsul(applicationOptions, builder);
-
+    app.RegisterConsul((applicationOptions.ServiceRegister.ServiceName,
+        applicationOptions.ServiceRegister.ServiceId,applicationOptions.ServiceRegister.ConsulHostName));
+    
     app.MapCarter();
 
     // Configure the HTTP request pipeline.

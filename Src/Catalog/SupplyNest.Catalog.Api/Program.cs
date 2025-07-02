@@ -1,7 +1,9 @@
+using BuildingBlocks.Infrastructure.ConsulServices;
 using Consul;
 using DispatchR;
 using DispatchR.Requests;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Scalar.AspNetCore;
@@ -12,7 +14,6 @@ using SupplyNest.Domain.Application.Services.Commands.Update;
 using SupplyNest.Domain.Application.Services.Interfaces;
 using SupplyNest.Domain.Application.Services.Queries;
 using SupplyNest.Domain.Infrastructure;
-using SupplyNest.Domain.Infrastructure.Consul;
 using SupplyNest.Domain.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,6 +39,7 @@ builder.Services.AddSingleton<IMongoClient>(config =>
     return new MongoClient(setting.MongoDbSettings.ConnectionString);
 });
 
+
 builder.Services.AddSingleton<IMongoDatabase>(config =>
 {
     var setting = config.GetRequiredService<IOptions<ApplicationOptions>>().Value;
@@ -45,6 +47,11 @@ builder.Services.AddSingleton<IMongoDatabase>(config =>
     return client.GetDatabase(setting.MongoDbSettings.DatabaseName);
 });
 
+
+builder.WebHost.ConfigureKestrel(options =>
+{ ;
+    options.ListenLocalhost(5185, o => o.Protocols = HttpProtocols.Http1AndHttp2);
+});
 
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -86,7 +93,8 @@ if (app.Environment.IsDevelopment())
 // Consul
 var applicationOption = builder.Services.BuildServiceProvider().GetRequiredService<ApplicationOptions>();
 
-app.RegisterConsul(applicationOption, builder);
+app.RegisterConsul((applicationOption.ServiceRegister.ServiceName,
+    applicationOption.ServiceRegister.ServiceId,applicationOption.ServiceRegister.ConsulHostName));
 
 app.UseHttpsRedirection();
 app.UseAuthorization();

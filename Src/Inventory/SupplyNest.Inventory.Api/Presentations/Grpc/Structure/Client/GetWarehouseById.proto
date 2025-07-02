@@ -1,0 +1,18 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "SupplyNest.Inventory.Api.Presentations.Grpc.Structure.Client";
+
+package warehouse;
+
+message GetWarehouseByIdRequest{
+  string warehouseId=1;
+}
+
+
+message GetWarehouseByIdResponse{
+  bool result=1;
+}
+
+service GetWarehouseById{
+  rpc GetWarehouseById(GetWarehouseByIdRequest) returns (GetWarehouseByIdResponse);
+}

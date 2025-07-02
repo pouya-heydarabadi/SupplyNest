@@ -53,6 +53,21 @@
       - "8600:8600/udp"
     networks:
       - supplynest_net
+    
+  sqlserver_warehousedb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver_warehousedb
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=admin123!
+      - MSSQL_PID=EXPRESS
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql-server-data:/var/opt/mssql
+    networks:
+      - supplynest_net
+        
   redis_inventory:
     image: redis:7
     container_name: RedisInventory_SupplyNest
@@ -63,7 +78,8 @@
       - redis_data:/data
     networks:
       - supplynest_net
-    mongodb_catalog:
+    
+  mongodb_catalog:
     image: mongo:latest
     container_name: MongoCatalog_SupplyNest
     restart: always
@@ -77,11 +93,13 @@
     networks:
       - supplynest_net
 
+  
 volumes:
   postgres_data:
   pgadmin_data:
   redis_data:
   mongodb_data:
+  sql-server-data:
     
 networks:
   supplynest_net:

@@ -2,7 +2,7 @@
 
 option csharp_namespace = "SupplyNest.Inventory.Api.Presentations.Grpc.Structure";
 
-package  inventory;
+package  warehouse;
 
 message UpdateInventoryRequest{
   string inventoryId=1;

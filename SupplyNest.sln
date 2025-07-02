@@ -26,6 +26,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BuildingBlocks", "BuildingB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Messaging", "Src\BuildingBlocks\BuildingBlocks.Messaging\BuildingBlocks.Messaging.csproj", "{456A354D-FB7A-40FF-AAA6-1B5AF3B9EA79}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuldingBlocks.Application", "Src\BuildingBlocks\BuildingBlocks.Application\BuldingBlocks.Application\BuldingBlocks.Application.csproj", "{8BF60830-BBB4-4F0A-861C-5EA6082C66F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Infrastructure", "Src\BuildingBlocks\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj", "{D9A47AB9-B87D-427D-8A0B-A8FD91E8155F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +47,8 @@ Global
 		{17E17DB9-3757-49E4-BF8E-9FD482857A55} = {BDDA1D7D-4FBA-40B5-A505-64AA676E7CC3}
 		{2DFB7025-FEE6-4297-963B-D4949F2928CC} = {9251A8F8-6B77-4A7F-910B-87736DEE76F1}
 		{456A354D-FB7A-40FF-AAA6-1B5AF3B9EA79} = {2DFB7025-FEE6-4297-963B-D4949F2928CC}
+		{8BF60830-BBB4-4F0A-861C-5EA6082C66F4} = {2DFB7025-FEE6-4297-963B-D4949F2928CC}
+		{D9A47AB9-B87D-427D-8A0B-A8FD91E8155F} = {2DFB7025-FEE6-4297-963B-D4949F2928CC}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{A189F40F-1B30-4DF3-AD3E-E384A4FD0418}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -61,5 +67,13 @@ Global
 		{456A354D-FB7A-40FF-AAA6-1B5AF3B9EA79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{456A354D-FB7A-40FF-AAA6-1B5AF3B9EA79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{456A354D-FB7A-40FF-AAA6-1B5AF3B9EA79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BF60830-BBB4-4F0A-861C-5EA6082C66F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BF60830-BBB4-4F0A-861C-5EA6082C66F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BF60830-BBB4-4F0A-861C-5EA6082C66F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BF60830-BBB4-4F0A-861C-5EA6082C66F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9A47AB9-B87D-427D-8A0B-A8FD91E8155F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9A47AB9-B87D-427D-8A0B-A8FD91E8155F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9A47AB9-B87D-427D-8A0B-A8FD91E8155F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9A47AB9-B87D-427D-8A0B-A8FD91E8155F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

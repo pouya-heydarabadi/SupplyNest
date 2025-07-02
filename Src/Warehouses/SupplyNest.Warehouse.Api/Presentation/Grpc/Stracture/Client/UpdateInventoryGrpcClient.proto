@@ -1,0 +1,18 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "SupplyNest.Warehouse.Api.Presentations.Grpc.Structure.Client";
+
+package  warehouse;
+
+message UpdateInventoryFromWarehouseServiceRequest{
+  string inventoryId=1;
+  int64 changeQuantity=2;
+}
+
+message UpdateInventoryFromWarehouseServiceResponse{
+  bool result=1;
+}
+
+service UpdateInventoryFromWarehouseService{
+  rpc UpdateInventory (UpdateInventoryFromWarehouseServiceRequest) returns (UpdateInventoryFromWarehouseServiceResponse);
+} 

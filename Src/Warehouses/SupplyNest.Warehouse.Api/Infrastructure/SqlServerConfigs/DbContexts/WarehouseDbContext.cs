@@ -11,11 +11,11 @@ public sealed class WarehouseDbContext:DbContext
     }
 
     // Warehouse
-    public DbSet<Domain.Warehouses.Warehouse> Warehouses => default!;
+    public DbSet<Domain.Warehouses.Warehouse> Warehouses { get; set; }
     
     // Warehouse Receipt
-    public DbSet<WarehouseReceipt> WarehouseReceipts => default!;
-    public DbSet<WarehouseReceiptItem> WarehouseReceiptItems => default!;
+    public DbSet<WarehouseReceipt> WarehouseReceipts { get; set; }
+    public DbSet<WarehouseReceiptItem> WarehouseReceiptItems { get; set; }
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

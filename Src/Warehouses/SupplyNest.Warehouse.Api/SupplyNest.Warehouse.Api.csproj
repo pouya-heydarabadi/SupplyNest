@@ -38,13 +38,18 @@
     </ItemGroup>
     
     <ItemGroup>
-        <Protobuf Include="Presentation\Grpc\Stracture\UpdateInventoryRequest.proto" GrpcServices="Client" />
+      <Folder Include="Application\Services\WarehouseReceipts\Queries\" />
+      <Folder Include="Presentation\Api\" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Application\Services\WarehouseReceipts\Queries\" />
-      <Folder Include="Presentation\Api\" />
-      <Folder Include="Presentation\Grpc\Services\" />
+        <Protobuf  Include="Presentation\Grpc\Stracture\Server\GetWarehouseByIdGrpcServer.proto" GrpcServices="Server" />
+        <Protobuf Include="Presentation\Grpc\Stracture\Client\UpdateInventoryGrpcClient.proto" GrpcServices="Client" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\BuildingBlocks\BuildingBlocks.Application\BuldingBlocks.Application\BuldingBlocks.Application.csproj" />
+      <ProjectReference Include="..\..\BuildingBlocks\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj" />
+    </ItemGroup>
 </Project>
+        
