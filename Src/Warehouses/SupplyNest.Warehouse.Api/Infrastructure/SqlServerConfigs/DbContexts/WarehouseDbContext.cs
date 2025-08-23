@@ -16,13 +16,6 @@ public sealed class WarehouseDbContext:DbContext
     // Warehouse Receipt
     public DbSet<WarehouseReceipt> WarehouseReceipts { get; set; }
     public DbSet<WarehouseReceiptItem> WarehouseReceiptItems { get; set; }
-
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-        
-    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(WarehouseDbContext).Assembly);
